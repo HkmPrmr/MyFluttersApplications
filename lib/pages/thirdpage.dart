@@ -12,10 +12,12 @@ class ThirdPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Container(width:30,height: 30,decoration: const BoxDecoration(shape: BoxShape.circle),child: Image.asset('assets/images/menu.png')),
-
-          
-        actions:  [
+        leading: Container(
+            width: 30,
+            height: 30,
+            decoration: const BoxDecoration(shape: BoxShape.circle),
+            child: Image.asset('assets/images/menu.png')),
+        actions: [
           CircleAvatar(
             backgroundColor: const Color(0xffffffff),
             child: Image.asset('assets/images/Bag.png'),
@@ -51,7 +53,7 @@ class ThirdPage extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 8,right: 8),
+        padding: const EdgeInsets.only(left: 8, right: 8),
         child: Column(
           children: [
             const SizedBox(
@@ -90,7 +92,7 @@ class ThirdPage extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only( top: 20),
+              padding: const EdgeInsets.only(top: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -98,10 +100,16 @@ class ThirdPage extends StatelessWidget {
                     height: 40,
                     width: 260,
                     child: TextField(
-                      decoration: InputDecoration(fillColor: Color.fromARGB(255, 184, 179, 179),
-                        focusedBorder:OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 184, 179, 179))) ,
-                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 166, 160, 160))),
-                        prefixIcon: Icon(Icons.search, color: Color(0xFF8F959E)),
+                      decoration: InputDecoration(
+                        fillColor: Color.fromARGB(255, 184, 179, 179),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 184, 179, 179))),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 166, 160, 160))),
+                        prefixIcon:
+                            Icon(Icons.search, color: Color(0xFF8F959E)),
                         hintText: 'Search....',
                         hintStyle: TextStyle(
                           color: Color(0xFF8F959E),
@@ -129,11 +137,11 @@ class ThirdPage extends StatelessWidget {
               ),
             ),
             ////////////////////////////////////////////////////////
-        
+
             const SizedBox(
               height: 5,
             ),
-        
+
             /////////////////////////////////////////////////////////////////////////
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,7 +169,7 @@ class ThirdPage extends StatelessWidget {
               ],
             ),
             ////////////////////////////////
-        
+
             SizedBox(
               height: 50,
               child: ListView(
@@ -173,7 +181,7 @@ class ThirdPage extends StatelessWidget {
                       imageBrandurl: 'assets/images/Adidaslogo.png',
                       nameBrand: 'Adidas'),
                   Padding(
-                    padding: EdgeInsets.only(left: 10,right: 10),
+                    padding: EdgeInsets.only(left: 10, right: 10),
                     child: BrandButton(
                         imageBrandurl: 'assets/images/nikelogo.png',
                         nameBrand: 'Nike'),
@@ -191,12 +199,12 @@ class ThirdPage extends StatelessWidget {
               ),
             ),
             ////////////////////////////////////////////////////////
-        
+
             const SizedBox(
               height: 5,
             ),
             ////////////////////////////////////
-        
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -227,7 +235,7 @@ class ThirdPage extends StatelessWidget {
               height: 5,
             ),
             ////////////////////////////////
-        
+
             // Container(
             //   color: const Color(0xFFFEFEFE),
             //   width: 360,
@@ -266,47 +274,68 @@ class ThirdPage extends StatelessWidget {
               child: FutureBuilder(
                 future: ProductServiceImp().getProducts(),
                 builder: (context, snapshot) {
-                  if(snapshot.hasData){
-                    ResultModel temp = snapshot.data as ResultModel;
-                    if (temp is ProductModel){
-
+                  print(snapshot);
+                  if (snapshot.hasData) {
+                    print('snapsot has data');
+                    List<ResultModel> temp = snapshot.data as List<ResultModel>;
+                    if (temp is List<ProductModel>) {
+                      return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: 1 / 1.7,
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 17),
+                        itemCount: temp.length,
+                        itemBuilder: (context, index) => LazaCard(
+                          imageUrl: temp[index].images[0],
+                          description: temp[index].title,
+                          price: temp[index].price.toString(),
+                          rate: temp[index].rating.toString(),
+                        ),
+                      );
+                    } else {
+                      return const Text(
+                        "Ops something went wronge",
+                        style: TextStyle(fontSize: 20, color: Colors.red),
+                      );
                     }
-                    else {
-                      
-                    }
+                  } else {
+                    print("no data");
+                    return const CircularProgressIndicator(
+                      color: Color(0xFF9775FA),
+                    );
                   }
                 },
-                child: GridView(
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 1 / 1.7,
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 17),
-                  children: const [
-                    LazaCard(
-                        imageUrl: 'assets/images/Laza1.png',
-                        description: 'Nike Sportswear Club Fleece',
-                        price: '\$99'),
-                    LazaCard(
-                        imageUrl: 'assets/images/Laza2.png',
-                        description: 'Trail Running Jacket Nike \nWindrunner',
-                        price: '\$99'),
-                    LazaCard(
-                        imageUrl: 'assets/images/Laza3.png',
-                        description: 'Nike Sportswear Club Fleece',
-                        price: '\$99'),
-                    LazaCard(
-                        imageUrl: 'assets/images/Laza4.png',
-                        description: 'Nike Sportswear Club Fleece',
-                        price: '\$99'),
-                  ],
-                ),
               ),
             )
           ],
         ),
       ),
+      //   // floatingActionButton: ElevatedButton(onPressed: ()async{
+
+      //   //   List<ResultModel> temp = await ProductServiceImp().getProducts();
+
+      //   //               if (temp is List<ProductModel>) {
+      //   //                 print('there is data');
+      //   //                  GridView.builder(
+      //   //                   gridDelegate:
+      //   //                       const SliverGridDelegateWithFixedCrossAxisCount(
+      //   //                           childAspectRatio: 1 / 1.7,
+      //   //                           crossAxisCount: 2,
+      //   //                           crossAxisSpacing: 5,
+      //   //                           mainAxisSpacing: 17),
+      //   //                   itemCount: temp.length,
+      //   //                   itemBuilder: (context, index) => LazaCard(
+      //   //                       imageUrl: temp[index].thumbnail.toString(),
+      //   //                       description: temp[index].title.toString(),
+      //   //                       price: '${temp[index].price.toString()}\$99'),
+      //   //                 );
+      //   //               } else {
+      //   //                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:  Text('There is something went wronge'),backgroundColor: Colors.red,));
+      //   //               }
+
+      //   }, child: const Text("press me")) ,
     );
   }
 }
